@@ -4,6 +4,8 @@
 
 A citizen audit of ghost public works. Paper, ground, next step.
 
+**Preview without installing:** [rawlincoln.github.io/ghostledger](https://rawlincoln.github.io/ghostledger/) · [Open in Codespaces](https://codespaces.new/Rawlincoln/ghostledger) · [Deploy a copy](https://vercel.com/new/clone?repository-url=https://github.com/Rawlincoln/ghostledger)
+
 GhostLedger is a civic web app for the OSF information-access sprint, **Transparency & Accountability** track, with a safety path for anonymous reporting.
 
 A ghost project is money that left the budget for a borehole, classroom, clinic, or road that cannot be found on site — or that exists only as a slab. Budget portals already publish PDFs. This product asks a different question: **is the thing the paper paid for actually there?**
@@ -41,6 +43,14 @@ Switching country swaps the clock, currency, offices, law, named list, projects,
 - Court rulings change legal status; they only change the money if recovery or a formal dismissal is published.
 - Conservative compilation of unresolved commissions, Auditor-General queries, and court records. **Not live IFMIS.**
 
+## Share a working preview
+
+| How | What the other person does |
+| --- | --- |
+| [Preview page](https://rawlincoln.github.io/ghostledger/) | Watch the demo video and screenshots. No account. |
+| [GitHub Codespaces](https://codespaces.new/Rawlincoln/ghostledger) | Free GitHub account. Cloud editor boots, then `npm run dev`, open port 8080. |
+| [Deploy to Vercel](https://vercel.com/new/clone?repository-url=https://github.com/Rawlincoln/ghostledger) | One click. They get their own public URL to forward. |
+
 ## Run it
 
 Node 22.
@@ -50,7 +60,7 @@ npm install
 npm run dev
 ```
 
-Opens on [http://127.0.0.1:8080](http://127.0.0.1:8080). Postgres is optional. Without `DATABASE_URL` the app uses PGLite (in-browser/server SQLite-shaped Postgres) so the proof of concept runs on a laptop.
+Then open `http://127.0.0.1:8080`. Postgres is optional. Without `DATABASE_URL` the app uses PGLite so the proof of concept runs on a laptop.
 
 ```bash
 npm run build

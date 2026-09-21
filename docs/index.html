@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GhostLedger — preview</title>
+    <meta
+      name="description"
+      content="Citizen audit of ghost public works. Paper, ground, next step."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --canvas: #eef1f4;
+        --ink: #101820;
+        --muted: #4a5560;
+        --line: #c5ccd4;
+        --paper: #f7f8fa;
+        --accent: #d4a017;
+        --ghost: #b42318;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        background: var(--canvas);
+        color: var(--ink);
+        font-family: "Atkinson Hyperlegible", sans-serif;
+      }
+      a {
+        color: var(--ink);
+      }
+      header {
+        background: var(--ink);
+        color: #e8edf2;
+        padding: 48px 24px 40px;
+      }
+      .wrap {
+        max-width: 960px;
+        margin: 0 auto;
+      }
+      .kicker {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #e25a4a;
+      }
+      h1 {
+        font-size: clamp(2.2rem, 6vw, 3.6rem);
+        letter-spacing: -0.02em;
+        margin-top: 12px;
+        line-height: 0.95;
+      }
+      .lead {
+        font-size: 1.25rem;
+        font-weight: 700;
+        max-width: 28ch;
+        margin-top: 20px;
+      }
+      .tape {
+        width: 72px;
+        height: 6px;
+        background: var(--accent);
+        margin: 24px 0;
+      }
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 28px;
+      }
+      .btn {
+        display: inline-flex;
+        min-height: 44px;
+        align-items: center;
+        padding: 0 18px;
+        font-size: 14px;
+        font-weight: 700;
+        text-decoration: none;
+      }
+      .btn-accent {
+        background: var(--accent);
+        color: var(--ink);
+      }
+      .btn-ghost {
+        border: 1px solid #e8edf2;
+        color: #e8edf2;
+      }
+      .btn-ink {
+        background: var(--ink);
+        color: #e8edf2;
+      }
+      .btn-line {
+        border: 1px solid var(--ink);
+      }
+      section {
+        padding: 40px 24px;
+        border-bottom: 1px solid var(--line);
+      }
+      h2 {
+        font-size: 1.6rem;
+        letter-spacing: -0.02em;
+      }
+      p.body {
+        margin-top: 12px;
+        max-width: 62ch;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+      video {
+        width: 100%;
+        margin-top: 20px;
+        border: 1px solid var(--line);
+        background: #000;
+        display: block;
+      }
+      .shots {
+        display: grid;
+        gap: 12px;
+        margin-top: 20px;
+      }
+      @media (min-width: 720px) {
+        .shots {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      .shots img {
+        width: 100%;
+        border: 1px solid var(--line);
+        display: block;
+      }
+      ol {
+        margin: 16px 0 0 1.2em;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+      footer {
+        padding: 28px 24px 48px;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="wrap">
+        <p class="kicker">Public preview · GhostLedger</p>
+        <h1>Our money.<br />Our future.<br />Our nation.</h1>
+        <p class="lead">A citizen audit of ghost public works. Paper, ground, next step.</p>
+        <div class="tape"></div>
+        <div class="actions">
+          <a class="btn btn-accent" href="https://codespaces.new/Rawlincoln/ghostledger">
+            Open live in Codespaces
+          </a>
+          <a class="btn btn-ghost" href="https://vercel.com/new/clone?repository-url=https://github.com/Rawlincoln/ghostledger">
+            Deploy a copy
+          </a>
+          <a class="btn btn-ghost" href="https://github.com/Rawlincoln/ghostledger">
+            View source
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <section>
+      <div class="wrap">
+        <h2>Watch the demo</h2>
+        <p class="body">
+          Clock of missing billions, recovered funds, project map, named officials, and citizen audit tours. No install.
+        </p>
+        <video controls playsinline poster="stills/01-clock.png">
+          <source src="demo.mp4" type="video/mp4" />
+        </video>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <h2>What you will see</h2>
+        <div class="shots">
+          <img src="stills/01-clock.png" alt="Live missing-billions clock" />
+          <img src="stills/04-about.png" alt="About: Our money, our future, our nation" />
+          <img src="stills/05-named.png" alt="Named officials board" />
+          <img src="stills/06-tour.png" alt="Citizen audit tours" />
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <h2>Run the full app in the browser</h2>
+        <p class="body">
+          GitHub Codespaces starts a cloud computer with Node 22. After it boots, in the terminal:
+        </p>
+        <ol>
+          <li>Wait for <code>npm install</code> to finish (it runs on first open).</li>
+          <li>Run <code>npm run dev</code>.</li>
+          <li>Open the forwarded port <strong>8080</strong> — that is GhostLedger.</li>
+        </ol>
+        <div class="actions" style="margin-top: 24px">
+          <a class="btn btn-ink" href="https://codespaces.new/Rawlincoln/ghostledger">
+            Open in Codespaces
+          </a>
+          <a class="btn btn-line" href="https://github.com/Rawlincoln/ghostledger#run-it">
+            Run on your laptop
+          </a>
+        </div>
+        <p class="body">
+          A free GitHub account can open Codespaces. Deploying a copy on Vercel gives you a permanent public URL to share.
+        </p>
+      </div>
+    </section>
+
+    <footer>
+      <div class="wrap">
+        GhostLedger · Kenya, Uganda, Tanzania, Ghana, Senegal, Togo, Zambia, Malawi · MIT
+      </div>
+    </footer>
+  </body>
+</html>

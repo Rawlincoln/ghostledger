@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>GhostLedger — pitch</title>
+    <style>
+      @font-face {
+        font-family: "Atkinson Hyperlegible";
+        src: url("../node_modules/@fontsource/atkinson-hyperlegible/files/atkinson-hyperlegible-latin-400-normal.woff2")
+          format("woff2");
+        font-weight: 400;
+      }
+      @font-face {
+        font-family: "Atkinson Hyperlegible";
+        src: url("../node_modules/@fontsource/atkinson-hyperlegible/files/atkinson-hyperlegible-latin-700-normal.woff2")
+          format("woff2");
+        font-weight: 700;
+      }
+      @font-face {
+        font-family: "IBM Plex Mono";
+        src: url("../node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2")
+          format("woff2");
+        font-weight: 400;
+      }
+      @font-face {
+        font-family: "IBM Plex Mono";
+        src: url("../node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2")
+          format("woff2");
+        font-weight: 500;
+      }
+      @page {
+        size: 1280px 720px;
+        margin: 0;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        background: #eef1f4;
+        color: #101820;
+        font-family: "Atkinson Hyperlegible", sans-serif;
+      }
+      .slide {
+        width: 1280px;
+        height: 720px;
+        padding: 48px 64px;
+        page-break-after: always;
+        break-after: page;
+        position: relative;
+        overflow: hidden;
+        background: #eef1f4;
+      }
+      .slide.ink {
+        background: #101820;
+        color: #e8edf2;
+      }
+      .slide.paper {
+        background: #f7f8fa;
+      }
+      .kicker {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #4a5560;
+      }
+      .ink .kicker {
+        color: #e25a4a;
+      }
+      h1 {
+        font-size: 64px;
+        line-height: 0.95;
+        letter-spacing: -0.02em;
+        font-weight: 700;
+        margin-top: 16px;
+      }
+      h2 {
+        font-size: 42px;
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+        margin-top: 12px;
+      }
+      p.lead {
+        font-size: 24px;
+        max-width: 22ch;
+        margin-top: 28px;
+        font-weight: 700;
+      }
+      p.body {
+        font-size: 20px;
+        line-height: 1.35;
+        max-width: 46ch;
+        margin-top: 16px;
+        color: #4a5560;
+      }
+      .ink p.body {
+        color: #9aa4b0;
+      }
+      .tape {
+        width: 96px;
+        height: 6px;
+        background: #d4a017;
+        margin-top: 28px;
+      }
+      .ghost {
+        color: #b42318;
+      }
+      .ink .ghost {
+        color: #e25a4a;
+      }
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        margin-top: 32px;
+      }
+      .grid-3 {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 24px;
+        margin-top: 36px;
+      }
+      .item h3 {
+        font-size: 22px;
+        margin-bottom: 8px;
+      }
+      .item p {
+        font-size: 16px;
+        line-height: 1.4;
+        color: #4a5560;
+      }
+      .ink .item p {
+        color: #9aa4b0;
+      }
+      .mono {
+        font-family: "IBM Plex Mono", monospace;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 28px;
+        font-size: 16px;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 10px 0;
+        border-bottom: 1px solid #c5ccd4;
+      }
+      .ink th,
+      .ink td {
+        border-bottom-color: #2a3440;
+      }
+      th {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #4a5560;
+        font-weight: 500;
+      }
+      .shot {
+        width: 100%;
+        height: 420px;
+        object-fit: cover;
+        object-position: top;
+        border: 1px solid #c5ccd4;
+        margin-top: 24px;
+      }
+      .footer {
+        position: absolute;
+        left: 64px;
+        right: 64px;
+        bottom: 28px;
+        display: flex;
+        justify-content: space-between;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #4a5560;
+      }
+      .ink .footer {
+        color: #9aa4b0;
+      }
+      ul.plain {
+        margin-top: 24px;
+        list-style: none;
+      }
+      ul.plain li {
+        font-size: 20px;
+        padding: 10px 0;
+        border-bottom: 1px solid #c5ccd4;
+      }
+      .big-num {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 72px;
+        color: #b42318;
+        letter-spacing: -0.05em;
+        margin-top: 20px;
+      }
+      .ink .big-num {
+        color: #e25a4a;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="slide ink">
+      <p class="kicker">OSF · Transparency & Accountability · 2026</p>
+      <h1>GhostLedger</h1>
+      <p class="lead">Our money.<br />Our future.<br />Our nation.</p>
+      <div class="tape"></div>
+      <p class="body" style="color: #e8edf2; max-width: 36ch">
+        A citizen audit of ghost public works. Paper, ground, next step.
+      </p>
+      <p class="kicker" style="margin-top: 40px; color: #e25a4a">We see what they hide.</p>
+      <div class="footer">
+        <span>GhostLedger</span>
+        <span>01 / 10</span>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="kicker">The problem</p>
+      <h2>The money left.<br />The borehole is a slab.</h2>
+      <div class="tape"></div>
+      <div class="grid-2">
+        <p class="body" style="margin-top: 0; color: #101820">
+          African budgets already publish PDFs. The gap is not another portal of the same tables. The gap is a person in
+          a ward who can prove the tank was never welded to the plot the paper paid for.
+        </p>
+        <ul class="plain">
+          <li>Unaccounted billions sit in audit queries for years.</li>
+          <li>Viral totals mix debt, rumour, and dismissed claims.</li>
+          <li>Reporting a missing clinic can be unsafe.</li>
+          <li>Finding out is not the same as knowing who to write.</li>
+        </ul>
+      </div>
+      <div class="footer">
+        <span>GhostLedger</span>
+        <span>02 / 10</span>
+      </div>
+    </section>
+
+    <section class="slide paper">
+      <p class="kicker">The users</p>
+      <h2>Built for the people who stand on the plot.</h2>
+      <div class="tape"></div>
+      <div class="grid-3">
+        <div class="item">
+          <h3>Residents</h3>
+          <p>A mid-range Android, patchy data, WhatsApp already open. No account. No KYC.</p>
+        </div>
+        <div class="item">
+          <h3>Monitors & journalists</h3>
+          <p>A sourced clock instead of a screenshot. Named people with a legal status, not a pile-on.</p>
+        </div>
+        <div class="item">
+          <h3>Oversight offices</h3>
+          <p>A public, dated trail of ground visits they can open without a login wall.</p>
+        </div>
+      </div>
+      <p class="body" style="margin-top: 40px">
+        Used in matatus, daladalas, trotros, market stalls, and community halls.
+      </p>
+      <div class="footer">
+        <span>GhostLedger</span>
+        <span>03 / 10</span>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="kicker">The solution</p>
+      <h2>Paper and ground on the same page.</h2>
+      <div class="tape"></div>
+      <div class="grid-3">
+        <div class="item">
+          <p class="mono kicker">01</p>
+          <h3>The paper</h3>
+          <p>Allocated. Paid. Source. Date. Conservative clock of unresolved commissions, audits, and court records.</p>
+        </div>
+        <div class="item">
+          <p class="mono kicker">02</p>
+          <h3>The ground</h3>
+          <p>GPS. Status. Hash. Citizens become project auditors. Visit. Report. Expose.</p>
+        </div>
+        <div class="item">
+          <p class="mono kicker">03</p>
+          <h3>The next step</h3>
+          <p>Who to write. Which law. A letter you can copy. A WhatsApp share of the evidence hash.</p>
+        </div>
+      </div>
+      <p class="body" style="margin-top: 48px; color: #101820">
+        Named politicians. Tracked projects. Immutable evidence.
+      </p>
+      <div class="footer">
+        <span>GhostLedger</span>
+        <span>04 / 10</span>
+      </div>
+    </section>
+
+    <section class="slide ink">
+      <p class="kicker">The clock</p>
+      <h2>Track the missing billions.</h2>
+      <p class="big-num">KES 275.4B+</p>
+      <p class="body" style="max-width: 50ch">
+        Kenya’s sourced unresolved stock, still counting. Recovered funds sit under it — only money an agency or a court
+        says came back. Traced is not recovered. A dismissed viral total is not in this clock.
+      </p>
+      <div class="footer">
+        <span>GhostLedger</span>
+        <span>05 / 10</span>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="kicker">Map · report · named</p>
+      <h2>Zoom the plot. Stamp the visit. Name the record.</h2>
+      <div class="tape"></div>
+      <div class="grid-3">
+        <div class="item">
+          <h3>Map</h3>
+          <p>Every tracked site has GPS. Zoom in. See allocated, paid, and whether anything stands on the ground.</p>
+        </div>
+        <div class="item">
+          <h3>Anonymous report</h3>
+          <p>No name, phone, or photo on the server. Optional GPS. A hash that cannot quietly disappear.</p>
+        </div>
+        <div class="item">
+          <h3>Named list</h3>
+          <p>Public scandals and missing-funds cases. A charge is not a conviction. Citizen indications rank separately.</p>
+        </div>
+      </div>
+      <div class="footer">
+        <span>GhostLedger</span>
+        <span>06 / 10</span>
+      </div>
+    </section>
+
+    <section class="slide paper">
+      <p class="kicker">Audit tours</p>
+      <h2>Where citizens become project auditors.</h2>
+      <div class="tape"></div>
+      <p class="body" style="color: #101820; max-width: 50ch">
+        Visit the site. Report what you find, or expose what was paid for and never built. Log the ground. Film it. The
+        trail is public and dated. No account.
+      </p>
+      <p class="body">
+        This is not a dashboard for Nairobi. It is a field book for the person who can still walk to the empty plot.
+      </p>
+      <div class="footer">
+        <span>GhostLedger</span>
+        <span>07 / 10</span>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="kicker">Trust is a method</p>
+      <h2>Accurate. Traceable. Checkable.</h2>
+      <div class="tape"></div>
+      <table>
+        <thead>
+          <tr>
+            <th>Rule</th>
+            <th>What it means</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Source on the figure</td>
+            <td>Publisher, URL, date, one line of what the document says.</td>
+          </tr>
+          <tr>
+            <td>Compilation date</td>
+            <td>Visible in the masthead. When facts change, the date moves.</td>
+          </tr>
+          <tr>
+            <td>Legal status ≠ money</td>
+            <td>A charge is not a conviction. Recovery needs a published return.</td>
+          </tr>
+          <tr>
+            <td>Conservative clock</td>
+            <td>Unresolved commissions, Auditor-General queries, court records.</td>
+          </tr>
+          <tr>
+            <td>Demo is labelled</td>
+            <td>Ward rows are composites. National numbers are sourced. Not live IFMIS.</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="footer">
+        <span>GhostLedger</span>
+        <span>08 / 10</span>
+      </div>
+    </section>
+
+    <section class="slide paper">
+      <p class="kicker">Eight-country pilot · OSF constraints</p>
+      <h2>Local law. Local offices. Same question.</h2>
+      <div class="tape"></div>
+      <table>
+        <thead>
+          <tr>
+            <th>Region</th>
+            <th>Countries</th>
+            <th>Languages</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>East</td>
+            <td>Kenya · Uganda · Tanzania</td>
+            <td>English, Kiswahili</td>
+          </tr>
+          <tr>
+            <td>West</td>
+            <td>Ghana · Senegal · Togo</td>
+            <td>English, French</td>
+          </tr>
+          <tr>
+            <td>Central</td>
+            <td>Zambia · Malawi</td>
+            <td>English</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="body" style="max-width: 60ch">
+        Trust · low bandwidth · accessibility · privacy · multilingual · local relevance · clear next steps. All seven
+        shipped, not as a checklist in a slide, as switches and letters in the product.
+      </p>
+      <div class="footer">
+        <span>GhostLedger</span>
+        <span>09 / 10</span>
+      </div>
+    </section>
+
+    <section class="slide ink">
+      <p class="kicker">Impact</p>
+      <h2>Monday morning, not a white paper.</h2>
+      <p class="lead" style="max-width: 28ch">
+        Pick a country. See the missing money. Stand on the GPS. Leave with a letter.
+      </p>
+      <div class="tape"></div>
+      <p class="body" style="color: #e8edf2">
+        Next: live audit APIs where they exist. USSD for feature phones. Arabic and Portuguese. Field partners replacing
+        demo ward rows, country by country.
+      </p>
+      <p class="kicker" style="margin-top: 36px">Our money. Our future. Our nation.</p>
+      <div class="footer">
+        <span>GhostLedger · ghostledger</span>
+        <span>10 / 10</span>
+      </div>
+    </section>
+  </body>
+</html>

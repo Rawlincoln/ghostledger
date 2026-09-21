@@ -1,0 +1,247 @@
+@import "tailwindcss";
+@import "@fontsource/atkinson-hyperlegible/400.css";
+@import "@fontsource/atkinson-hyperlegible/700.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+
+@theme {
+  --font-sans: "Atkinson Hyperlegible", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --color-canvas: #eef1f4;
+  --color-ink: #101820;
+  --color-muted: #4a5560;
+  --color-line: #c5ccd4;
+  --color-paper: #f7f8fa;
+  --color-accent: #d4a017;
+  --color-accent-ink: #101820;
+  --color-ghost: #b42318;
+  --color-verified: #1b6b3a;
+  --color-delayed: #8a5a10;
+  --radius: 0;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-line) var(--color-canvas);
+  }
+
+  html[data-theme="dark"] {
+    --color-canvas: #0e141b;
+    --color-ink: #e8edf2;
+    --color-muted: #9aa4b0;
+    --color-line: #2a3440;
+    --color-paper: #151c24;
+    --color-ghost: #e25a4a;
+    --color-verified: #3d9b63;
+    --color-delayed: #d4a017;
+  }
+
+  html.low-data .field-photo {
+    display: none !important;
+  }
+
+  html.large-text body {
+    font-size: 1.25rem;
+    line-height: 1.6;
+  }
+
+  html.large-text h1 {
+    letter-spacing: -0.02em;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    font-size: 1.0625rem;
+    line-height: 1.55;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 40;
+    opacity: 0.045;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  }
+
+  html[data-theme="dark"] body::before {
+    mix-blend-mode: overlay;
+    opacity: 0.07;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--color-accent) 40%, transparent);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+    background: var(--color-paper);
+    border: 1px solid var(--color-line);
+    border-radius: 0;
+  }
+
+  table {
+    font-variant-numeric: tabular-nums;
+  }
+
+  a {
+    color: inherit;
+  }
+}
+
+.tape {
+  background: var(--color-accent);
+}
+
+.live-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--color-ghost);
+  animation: live-pulse 1.6s var(--ease-out) infinite;
+}
+
+.live-dot-fast {
+  animation-duration: 0.7s;
+}
+
+.clock-alarm {
+  background: var(--color-ink);
+  color: var(--color-canvas);
+  overflow-x: hidden;
+}
+
+.clock-digits {
+  font-size: clamp(1.9rem, 8.2vw, 7.5rem);
+  color: var(--color-ghost);
+  letter-spacing: -0.06em;
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.project-map {
+  height: 22rem;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .project-map {
+    height: 32rem;
+  }
+}
+
+.project-map .leaflet-container {
+  height: 100%;
+  width: 100%;
+  font-family: var(--font-sans);
+  background: var(--color-paper);
+}
+
+.project-map .leaflet-bar a {
+  border-radius: 0;
+  color: var(--color-ink);
+}
+
+html[data-theme="dark"] .project-map .leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(0.92) contrast(0.92);
+}
+
+@keyframes live-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live-dot {
+    animation: none;
+  }
+}
+
+.certificate {
+  box-shadow: inset 0 0 0 1px var(--color-line);
+}
+
+@keyframes stamp-in {
+  from {
+    transform: scale(1.38) rotate(-12deg);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) rotate(-7deg);
+    opacity: 1;
+  }
+}
+
+.rubber-stamp {
+  display: inline-block;
+  border: 3px solid var(--color-ghost);
+  color: var(--color-ghost);
+  padding: 0.55rem 0.85rem;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transform: rotate(-7deg);
+  animation: stamp-in 420ms var(--ease-out) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rubber-stamp {
+    animation: none;
+  }
+}
+
+@media print {
+  header,
+  footer,
+  .no-print,
+  body::before {
+    display: none !important;
+  }
+
+  html.low-data .field-photo {
+    display: block !important;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  main {
+    color: #101820;
+    background: #fff;
+  }
+}
+
+@utility hairline {
+  border-color: var(--color-line);
+}

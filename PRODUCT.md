@@ -57,6 +57,7 @@ Malawi sources: National Audit Office, ACB, Access to Information Act 2017, Bake
 - Dashboard (`/`): an alarming live clock of documented unaccounted public money is the first thing on the landing page; recovered/forfeited funds sit under it (published recoveries only); a zoomable map shows GPS project sites with allocated, paid, and ground status.
 - Open a project: money trail, sources, last update, citizen observations, responsible offices, next steps.
 - File an anonymous on-site report (GPS + status + short note). Optionally indicate who is responsible; that name ranks on the named list. No account. No name, phone, or photo stored on the server.
+- Safe path: country-scoped, practical protection — statutory programme where one exists (Kenya WPA, Ghana Act 975, Tanzania 2015 Act), otherwise prosecutor/court practice. What a judge can order. When not to walk into a police station. Copyable letter filled offline. GhostLedger never stores identity.
 - Named officials (no account): public scandals and missing-funds cases with who was named as responsible, plus a people leaderboard. Amount and since-when are shown. The list grows when a report names a person. A charge is not a conviction.
 - Claim a demo bounty by filing a GPS-tagged report.
 - Post a bounty (no account): lock demo credit in escrow, review proof, release funds.

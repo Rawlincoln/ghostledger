@@ -44,6 +44,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
     { to: "/about", label: c.navAbout },
     { to: "/ledger", label: c.navLedger },
     { to: "/report", label: c.navReport },
+    { to: "/safe", label: c.navSafe },
     { to: "/named", label: c.navNamed },
     { to: "/bounties", label: c.navBounties },
     { to: "/tour", label: c.navTour },
@@ -209,6 +210,10 @@ export function Shell({ children }: { children: React.ReactNode }) {
             {" · "}
             <Link to="/record" className="font-bold text-ink">
               {c.navRecord}
+            </Link>
+            {" · "}
+            <Link to="/safe" className="font-bold text-ink">
+              {c.navSafe}
             </Link>
             {" · "}
             <Link to="/act" className="font-bold text-ink">

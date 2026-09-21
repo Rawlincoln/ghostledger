@@ -214,6 +214,11 @@ function ReportPage() {
       <aside className="mt-6 border border-line bg-paper p-4">
         <p className="font-bold">{c.safetyTitle}</p>
         <p className="mt-2 text-sm text-muted">{c.safetyBody}</p>
+        <p className="mt-3">
+          <Link to="/safe" className="text-sm font-bold">
+            {c.navSafe}
+          </Link>
+        </p>
       </aside>
 
       <form className="mt-8 space-y-6" onSubmit={onSubmit}>

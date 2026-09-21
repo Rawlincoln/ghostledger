@@ -20,6 +20,7 @@ import { Route as MethodRouteImport } from './routes/method'
 import { Route as NamedRouteImport } from './routes/named'
 import { Route as RecordRouteImport } from './routes/record'
 import { Route as ReportRouteImport } from './routes/report'
+import { Route as SafeRouteImport } from './routes/safe'
 import { Route as TourRouteImport } from './routes/tour'
 import { Route as BountiesIndexRouteImport } from './routes/bounties.index'
 import { Route as BountiesIdRouteImport } from './routes/bounties.$id'
@@ -85,6 +86,11 @@ const ReportRoute = ReportRouteImport.update({
   path: '/report',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SafeRoute = SafeRouteImport.update({
+  id: '/safe',
+  path: '/safe',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TourRoute = TourRouteImport.update({
   id: '/tour',
   path: '/tour',
@@ -143,6 +149,7 @@ export interface FileRoutesByFullPath {
   '/named': typeof NamedRoute
   '/record': typeof RecordRoute
   '/report': typeof ReportRoute
+  '/safe': typeof SafeRoute
   '/tour': typeof TourRouteWithChildren
   '/bounties/$id': typeof BountiesIdRoute
   '/bounties/new': typeof BountiesNewRoute
@@ -164,6 +171,7 @@ export interface FileRoutesByTo {
   '/named': typeof NamedRoute
   '/record': typeof RecordRoute
   '/report': typeof ReportRoute
+  '/safe': typeof SafeRoute
   '/bounties/$id': typeof BountiesIdRoute
   '/bounties/new': typeof BountiesNewRoute
   '/ledger/$slug': typeof LedgerSlugRoute
@@ -186,6 +194,7 @@ export interface FileRoutesById {
   '/named': typeof NamedRoute
   '/record': typeof RecordRoute
   '/report': typeof ReportRoute
+  '/safe': typeof SafeRoute
   '/tour': typeof TourRouteWithChildren
   '/bounties/$id': typeof BountiesIdRoute
   '/bounties/new': typeof BountiesNewRoute
@@ -210,6 +219,7 @@ export interface FileRouteTypes {
     | '/named'
     | '/record'
     | '/report'
+    | '/safe'
     | '/tour'
     | '/bounties/$id'
     | '/bounties/new'
@@ -231,6 +241,7 @@ export interface FileRouteTypes {
     | '/named'
     | '/record'
     | '/report'
+    | '/safe'
     | '/bounties/$id'
     | '/bounties/new'
     | '/ledger/$slug'
@@ -252,6 +263,7 @@ export interface FileRouteTypes {
     | '/named'
     | '/record'
     | '/report'
+    | '/safe'
     | '/tour'
     | '/bounties/$id'
     | '/bounties/new'
@@ -275,6 +287,7 @@ export interface RootRouteChildren {
   NamedRoute: typeof NamedRoute
   RecordRoute: typeof RecordRoute
   ReportRoute: typeof ReportRoute
+  SafeRoute: typeof SafeRoute
   TourRoute: typeof TourRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
@@ -356,6 +369,13 @@ declare module '@tanstack/react-router' {
       path: '/report'
       fullPath: '/report'
       preLoaderRoute: typeof ReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/safe': {
+      id: '/safe'
+      path: '/safe'
+      fullPath: '/safe'
+      preLoaderRoute: typeof SafeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tour': {
@@ -477,6 +497,7 @@ const rootRouteChildren: RootRouteChildren = {
   NamedRoute: NamedRoute,
   RecordRoute: RecordRoute,
   ReportRoute: ReportRoute,
+  SafeRoute: SafeRoute,
   TourRoute: TourRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }

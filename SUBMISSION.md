@@ -15,7 +15,7 @@ Transparency: sourced public money, compilation dates, conservative clocks, reco
 
 Accountability: named officials from published records; citizen reports that can indicate a responsible person; audit tours where residents become project auditors; Access to Information letters and WhatsApp hashes that leave the app and enter a real office.
 
-Safety: no account wall. Reports store status, optional GPS, a short note, and a hash. They do not store a name, a phone number, or a photograph. GPS is optional. Photographs stay on the phone in low-data and default flows. That is the path for someone standing on a politically sensitive site.
+Safety: no account wall. Reports store status, optional GPS, a short note, and a hash. They do not store a name, a phone number, or a photograph. GPS is optional. Photographs stay on the phone in low-data and default flows. Safe path is country-scoped: a statutory protection programme where one exists (Kenya WPA, Ghana Act 975, Tanzania 2015 Act); prosecutor and court practice where it does not; what a judge can order; what to do if the police are the threat. Letters are copied offline. GhostLedger never stores identity.
 
 ## Information sources
 
@@ -75,7 +75,7 @@ We did not use a language model to inflate recoveries, to decide who is guilty, 
 | Trust and verification | Sources, dates, method page, conservative clock |
 | Low bandwidth | Text-first pages, low-data (photos off, map tiles off), no account wall |
 | Accessibility | Atkinson Hyperlegible, large-text, skip-to-content, 44px taps, mobile 390px |
-| Privacy | Anonymous reports; no name, phone, or photo on the server |
+| Privacy | Anonymous reports; no name, phone, or photo on the server; Safe path letters filled offline |
 | Multilingual | EN / SW / FR; country picker sets the default |
 | Local relevance | Currency, offices, ATI law, region word, named list per country |
 | Clear next steps | Act page, copyable letter, WhatsApp hash |

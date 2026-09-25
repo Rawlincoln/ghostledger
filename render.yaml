@@ -1,14 +1,16 @@
-# GhostLedger on Render. One-click: https://render.com/deploy?repo=https://github.com/Rawlincoln/ghostledger
+# GhostLedger on Render.
+# Free (512MB) is killed on boot: the embedded database peaks near 760MB.
+# 1c-2g is the smallest plan that stays up. Dashboard shows the price before you confirm.
 services:
   - type: web
     name: ghostledger
     runtime: node
-    plan: free
+    plan: 1c-2g
     region: frankfurt
     branch: main
-    buildCommand: npm ci --include=dev && npm run build
+    buildCommand: PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 NPM_CONFIG_PRODUCTION=false npm ci && npm run build
     startCommand: node .output/server/index.mjs
-    healthCheckPath: /
+    healthCheckPath: /healthz.txt
     envVars:
       - key: NODE_VERSION
         value: "22"

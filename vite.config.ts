@@ -170,8 +170,9 @@ export default defineConfig(({ command, isPreview }) => ({
     ...(command === "build" || isPreview
       ? [
           nitro({
-            // Vercel for the app-builder publish. Render sets NITRO_PRESET=render-com.
-            preset: process.env.NITRO_PRESET || "vercel",
+            // Vercel for the app-builder publish. Render sets RENDER=true and NITRO_PRESET.
+            preset:
+              process.env.NITRO_PRESET || (process.env.RENDER ? "render-com" : "vercel"),
             // Auto-registers server/middleware/* (the PWA install page +
             // manifest + head-tag middleware). Nitro v3 defaults serverDir to
             // false, so removing this silently unwires /?install=1 on deploys.

@@ -4,7 +4,7 @@
 
 A citizen audit of ghost public works. Paper, ground, next step.
 
-**Preview without installing:** [Open the demo page](https://cdn.jsdelivr.net/gh/Rawlincoln/ghostledger@main/docs/index.html) · [Run the live app in Codespaces](https://codespaces.new/Rawlincoln/ghostledger) · [Deploy a copy](https://vercel.com/new/clone?repository-url=https://github.com/Rawlincoln/ghostledger)
+**Preview without installing:** [Open the demo page](https://cdn.jsdelivr.net/gh/Rawlincoln/ghostledger@main/docs/index.html) · [Run the live app in Codespaces](https://codespaces.new/Rawlincoln/ghostledger) · [Deploy on Render](https://render.com/deploy?repo=https://github.com/Rawlincoln/ghostledger)
 
 GhostLedger is a civic web app for the OSF information-access sprint, **Transparency & Accountability** track, with a safety path for anonymous reporting.
 
@@ -50,7 +50,7 @@ Switching country swaps the clock, currency, offices, law, named list, projects,
 | --- | --- |
 | [Preview page](https://cdn.jsdelivr.net/gh/Rawlincoln/ghostledger@main/docs/index.html) | Watch the demo video and screenshots. No account. |
 | [GitHub Codespaces](https://codespaces.new/Rawlincoln/ghostledger) | Free GitHub account. Cloud editor boots, then `npm run dev`, open port 8080. |
-| [Deploy to Vercel](https://vercel.com/new/clone?repository-url=https://github.com/Rawlincoln/ghostledger) | One click. They get their own public URL to forward. |
+| [Deploy on Render](https://render.com/deploy?repo=https://github.com/Rawlincoln/ghostledger) | Free Render account. Public URL on `onrender.com`. Spins down when idle. |
 
 ## Run it
 

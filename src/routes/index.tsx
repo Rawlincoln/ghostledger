@@ -17,7 +17,7 @@ import { inCountry, officeBoard } from "@/lib/ghost/catalog";
 import { demoBanner } from "@/lib/ghost/country";
 import { kes, kesShort } from "@/lib/ghost/format";
 import { t } from "@/lib/ghost/i18n";
-import { getClockExtras, listProjects } from "@/lib/ghost/queries";
+import { getClockExtras, listProjects } from "@/lib/ghost/instant";
 import { useGhost } from "@/lib/ghost/store";
 
 export const Route = createFileRoute("/")({

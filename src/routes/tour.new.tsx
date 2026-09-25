@@ -4,10 +4,10 @@ import { inCountry, regionsFor } from "@/lib/ghost/catalog";
 import { kes } from "@/lib/ghost/format";
 import { guestName } from "@/lib/ghost/guest";
 import { t } from "@/lib/ghost/i18n";
-import { listProjects } from "@/lib/ghost/queries";
+import { listProjects } from "@/lib/ghost/instant";
 import { useGhost } from "@/lib/ghost/store";
 import { MIN_TOUR_KES } from "@/lib/ghost/tour-types";
-import { createTour, getTourWallet } from "@/lib/ghost/tours";
+import { createTour, getTourWallet } from "@/lib/ghost/instant";
 import { useGuestId } from "@/lib/ghost/use-guest";
 
 export const Route = createFileRoute("/tour/new")({

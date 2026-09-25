@@ -8,7 +8,7 @@ import {
   listLeaders,
   listMyBounties,
   listPayouts,
-} from "@/lib/ghost/bounties";
+} from "@/lib/ghost/instant";
 import type { BountyRow, BountySort, Wallet } from "@/lib/ghost/bounty-types";
 import { regionsFor } from "@/lib/ghost/catalog";
 import { demoBanner } from "@/lib/ghost/country";

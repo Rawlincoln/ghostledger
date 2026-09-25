@@ -1,6 +1,6 @@
-# GhostLedger on Render's free instance (512MB).
-# PGLite needs ~490MB by itself, so this host serves the public record from memory.
-# Citizen reports last until the free instance sleeps.
+# GhostLedger on Render's free instance.
+# The site is static files. A tiny server binds the port at once so a cold
+# start is not spent parsing the full app server.
 services:
   - type: web
     name: ghostledger
@@ -8,19 +8,19 @@ services:
     plan: free
     region: frankfurt
     branch: main
-    buildCommand: PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 NPM_CONFIG_PRODUCTION=false npm ci && npm run build
-    startCommand: node .output/server/index.mjs
+    buildCommand: PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 NPM_CONFIG_PRODUCTION=false npm ci && GHOST_STATIC=1 GHOST_EMBEDDED_DB=off NITRO_PRESET=render-com npm run build
+    startCommand: node scripts/serve-static.mjs
     healthCheckPath: /healthz.txt
     envVars:
       - key: NODE_VERSION
         value: "22"
       - key: NITRO_PRESET
         value: render-com
-      - key: NITRO_HOST
-        value: 0.0.0.0
-      - key: VITE_AUTH_ENABLED
-        value: "false"
+      - key: GHOST_STATIC
+        value: "1"
       - key: GHOST_EMBEDDED_DB
         value: "off"
+      - key: VITE_AUTH_ENABLED
+        value: "false"
       - key: PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD
         value: "1"

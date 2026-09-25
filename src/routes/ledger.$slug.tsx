@@ -6,7 +6,7 @@ import { StatusMark } from "@/components/ghost/status-mark";
 import { demoBanner } from "@/lib/ghost/country";
 import { atiLetter, formatDate, kes, mapsUrl } from "@/lib/ghost/format";
 import { t } from "@/lib/ghost/i18n";
-import { getProject } from "@/lib/ghost/queries";
+import { getProject } from "@/lib/ghost/instant";
 import { useGhost } from "@/lib/ghost/store";
 
 export const Route = createFileRoute("/ledger/$slug")({

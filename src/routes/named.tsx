@@ -6,7 +6,7 @@ import { missingList, peopleOn, scandalList } from "@/lib/ghost/catalog";
 import { demoBanner } from "@/lib/ghost/country";
 import { kes, kesShort } from "@/lib/ghost/format";
 import { t, type Copy } from "@/lib/ghost/i18n";
-import { listNamedBoard, namedStats } from "@/lib/ghost/named";
+import { listNamedBoard, namedStats } from "@/lib/ghost/instant";
 import type { NamedBoardRow, NamedSort, NamedView } from "@/lib/ghost/named-types";
 import { type MoneyItem } from "@/lib/ghost/record";
 import { useGhost } from "@/lib/ghost/store";

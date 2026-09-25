@@ -5,7 +5,7 @@ import { demoBanner } from "@/lib/ghost/country";
 import { kes, kesShort, timeLeft } from "@/lib/ghost/format";
 import { t } from "@/lib/ghost/i18n";
 import { useGhost } from "@/lib/ghost/store";
-import { listMyTours, listTours, tourStats } from "@/lib/ghost/tours";
+import { listMyTours, listTours, tourStats } from "@/lib/ghost/instant";
 import type { TourRow, TourSort } from "@/lib/ghost/tour-types";
 import { useGuestId } from "@/lib/ghost/use-guest";
 

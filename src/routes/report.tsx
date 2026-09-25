@@ -4,7 +4,7 @@ import { CopyLetter, CopyShare } from "@/components/ghost/copy-share";
 import { namedPeople, inCountry } from "@/lib/ghost/catalog";
 import { atiLetter, haversineM, kes, shareObservation, stampHash } from "@/lib/ghost/format";
 import { t } from "@/lib/ghost/i18n";
-import { listProjects, submitReport } from "@/lib/ghost/queries";
+import { listProjects, submitReport } from "@/lib/ghost/instant";
 import { useGhost } from "@/lib/ghost/store";
 import type { Observation } from "@/lib/ghost/types";
 

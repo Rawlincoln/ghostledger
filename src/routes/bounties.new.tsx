@@ -1,12 +1,12 @@
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { createBounty, getWallet } from "@/lib/ghost/bounties";
+import { createBounty, getWallet } from "@/lib/ghost/instant";
 import { MIN_BOUNTY_KES } from "@/lib/ghost/bounty-types";
 import { inCountry, regionsFor } from "@/lib/ghost/catalog";
 import { kes } from "@/lib/ghost/format";
 import { guestName } from "@/lib/ghost/guest";
 import { t } from "@/lib/ghost/i18n";
-import { listProjects } from "@/lib/ghost/queries";
+import { listProjects } from "@/lib/ghost/instant";
 import { useGhost } from "@/lib/ghost/store";
 import { useGuestId } from "@/lib/ghost/use-guest";
 

@@ -8,7 +8,7 @@ import {
   reclaimBounty,
   reviewSubmission,
   submitBounty,
-} from "@/lib/ghost/bounties";
+} from "@/lib/ghost/instant";
 import { formatDate, isPast, kes, timeLeft } from "@/lib/ghost/format";
 import { guestName } from "@/lib/ghost/guest";
 import { t } from "@/lib/ghost/i18n";

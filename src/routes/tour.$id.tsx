@@ -5,7 +5,7 @@ import { EscrowTrack } from "@/components/ghost/escrow-track";
 import { formatDate, isPast, kes, timeLeft } from "@/lib/ghost/format";
 import { guestName } from "@/lib/ghost/guest";
 import { t } from "@/lib/ghost/i18n";
-import { listProjects } from "@/lib/ghost/queries";
+import { listProjects } from "@/lib/ghost/instant";
 import { demoBanner } from "@/lib/ghost/country";
 import { useGhost } from "@/lib/ghost/store";
 import {
@@ -14,7 +14,7 @@ import {
   logTourVisit,
   reclaimTour,
   reviewTourVisit,
-} from "@/lib/ghost/tours";
+} from "@/lib/ghost/instant";
 import { useGuestId } from "@/lib/ghost/use-guest";
 
 export const Route = createFileRoute("/tour/$id")({

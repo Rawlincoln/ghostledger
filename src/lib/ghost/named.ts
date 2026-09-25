@@ -1,7 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
-import { getSql } from "@/lib/db";
+import { embeddedDbOff, getSql } from "@/lib/db";
 import { missingList, namedPeople, scandalList } from "./catalog";
 import { asCountry, type CountryId } from "./country";
+import { memoryReportHits } from "./queries";
 import type { NamedPerson } from "./record";
 import type { NamedBoardRow, NamedProjectHit, NamedSort } from "./named-types";
 
@@ -121,6 +122,7 @@ function mergeBoard(
 }
 
 async function loadHits(): Promise<ReportHit[]> {
+  if (embeddedDbOff) return memoryReportHits();
   const sql = await getSql();
   try {
     return await sql<ReportHit>`

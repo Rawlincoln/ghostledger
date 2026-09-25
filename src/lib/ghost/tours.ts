@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { getSql } from "@/lib/db";
+import { embeddedDbOff, getSql } from "@/lib/db";
 import { parseGuestId } from "./guest";
 import { asCountry } from "./country";
 import { DEMO_CREDIT_KES, type Wallet } from "./bounty-types";
@@ -99,6 +99,29 @@ function daysFromNow(days: number): string {
   return new Date(Date.now() + days * 86_400_000).toISOString();
 }
 
+function memoryTours(): TourRow[] {
+  return SEED_TOURS.map((t, i) => ({
+    id: i + 1,
+    slug: t.slug,
+    plannerUserId: SEED_TOUR_PLANNER,
+    plannerName: t.plannerName,
+    title: t.title,
+    titleSw: t.titleSw,
+    investigation: t.investigation,
+    county: t.county,
+    country: asCountry(t.country),
+    projectSlugs: t.projectSlugs,
+    budgetKes: t.budgetKes,
+    escrowKes: t.status === "open" ? t.budgetKes : 0,
+    status: t.status,
+    deadline: daysFromNow(t.days),
+    winnerVisitId: null,
+    isDemo: true,
+    createdAt: "2026-01-01T00:00:00.000Z",
+    visitCount: t.visits.length,
+  }));
+}
+
 function displayName(user: {
   displayName?: string | null;
   primaryEmail?: string | null;
@@ -178,6 +201,17 @@ async function ensureTourSeed() {
 export const tourStats = createServerFn({ method: "GET" })
   .validator((input: { country?: string } | undefined) => input ?? {})
   .handler(async ({ data }): Promise<TourStats> => {
+    if (embeddedDbOff) {
+      const country = asCountry(data.country);
+      const rows = memoryTours().filter((t) => t.country === country);
+      const seeds = SEED_TOURS.filter((t) => asCountry(t.country) === country);
+      return {
+        live: rows.filter((t) => t.status === "open").length,
+        unclaimedKes: rows.filter((t) => t.status === "open").reduce((n, t) => n + t.escrowKes, 0),
+        visits: seeds.reduce((n, t) => n + t.visits.length, 0),
+        paidOutKes: rows.filter((t) => t.status === "paid").reduce((n, t) => n + t.budgetKes, 0),
+      };
+    }
     await ensureTourSeed();
     const sql = await getSql();
     const country = asCountry(data.country);
@@ -205,6 +239,14 @@ export const tourStats = createServerFn({ method: "GET" })
 export const listTours = createServerFn({ method: "GET" })
   .validator((input: { tab: "open" | "paid"; sort: TourSort; country?: string }) => input)
   .handler(async ({ data }): Promise<TourRow[]> => {
+    if (embeddedDbOff) {
+      const country = asCountry(data.country);
+      const rows = memoryTours().filter((t) => t.status === data.tab && t.country === country);
+      if (data.sort === "newest") rows.sort((a, b) => b.id - a.id);
+      else if (data.sort === "ending") rows.sort((a, b) => a.deadline.localeCompare(b.deadline));
+      else rows.sort((a, b) => b.budgetKes - a.budgetKes);
+      return rows;
+    }
     await ensureTourSeed();
     const sql = await getSql();
     const status = data.tab;
@@ -227,6 +269,7 @@ export const listTours = createServerFn({ method: "GET" })
 export const listMyTours = createServerFn({ method: "GET" })
   .validator((input: { sort: TourSort; guestId?: string }) => input)
   .handler(async ({ data }): Promise<TourRow[]> => {
+    if (embeddedDbOff) return [];
     await ensureTourSeed();
     const sql = await getSql();
     const uid = parseGuestId(data.guestId);
@@ -248,6 +291,23 @@ export const listMyTours = createServerFn({ method: "GET" })
 export const getTour = createServerFn({ method: "GET" })
   .validator((input: { id: number }) => input)
   .handler(async ({ data }) => {
+    if (embeddedDbOff) {
+      const tour = memoryTours().find((t) => t.id === data.id) ?? null;
+      if (!tour) return { tour: null, visits: [] as TourVisit[] };
+      const seed = SEED_TOURS[data.id - 1];
+      const visits: TourVisit[] = (seed?.visits ?? []).map((v, i) => ({
+        id: i + 1,
+        tourId: tour.id,
+        loggerUserId: v.logger,
+        loggerName: v.name,
+        projectSlug: v.projectSlug,
+        findings: v.findings,
+        videoUrl: v.videoUrl,
+        status: v.status,
+        createdAt: "2026-01-01T00:00:00.000Z",
+      }));
+      return { tour, visits };
+    }
     await ensureTourSeed();
     const sql = await getSql();
     const rows = await sql<TourSql>`
@@ -272,6 +332,7 @@ export const getTour = createServerFn({ method: "GET" })
 export const getTourWallet = createServerFn({ method: "GET" })
   .validator((input: { guestId?: string } | undefined) => input ?? {})
   .handler(async ({ data }): Promise<Wallet> => {
+    if (embeddedDbOff) return { balanceKes: DEMO_CREDIT_KES };
     await ensureTourSeed();
     return ensureWallet(parseGuestId(data.guestId));
   });

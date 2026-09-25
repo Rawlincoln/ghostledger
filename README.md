@@ -50,7 +50,7 @@ Switching country swaps the clock, currency, offices, law, named list, projects,
 | --- | --- |
 | [Preview page](https://cdn.jsdelivr.net/gh/Rawlincoln/ghostledger@main/docs/index.html) | Watch the demo video and screenshots. No account. |
 | [GitHub Codespaces](https://codespaces.new/Rawlincoln/ghostledger) | Free GitHub account. Cloud editor boots, then `npm run dev`, open port 8080. |
-| [Deploy on Render](https://render.com/deploy?repo=https://github.com/Rawlincoln/ghostledger) | Public URL on `onrender.com`. Needs the 2GB plan — the free 512MB instance is killed on boot. |
+| [Deploy on Render](https://render.com/deploy?repo=https://github.com/Rawlincoln/ghostledger) | Free plan. Public URL on `onrender.com`. Spins down when idle. Reports last until it sleeps. |
 
 ## Run it
 

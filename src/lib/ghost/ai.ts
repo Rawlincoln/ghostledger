@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { getSql } from "@/lib/db";
+import { embeddedDbOff, getSql } from "@/lib/db";
 import { allProjects } from "./catalog";
 import { COUNTRIES } from "./country";
 import type { Lang } from "./types";
@@ -10,13 +10,15 @@ export const explainProject = createServerFn({ method: "POST" })
     const project = allProjects().find((p) => p.slug === data.slug);
     if (!project) return { ok: false as const, error: "Unknown project." };
 
-    const sql = await getSql();
-    const cached = await sql<{ body: string }>`
-      select body from gl_ai_cache
-      where project_slug = ${data.slug} and lang = ${data.lang} and kind = 'explain'
-      limit 1
-    `;
-    if (cached[0]?.body) return { ok: true as const, text: cached[0].body, cached: true };
+    if (!embeddedDbOff) {
+      const sql = await getSql();
+      const cached = await sql<{ body: string }>`
+        select body from gl_ai_cache
+        where project_slug = ${data.slug} and lang = ${data.lang} and kind = 'explain'
+        limit 1
+      `;
+      if (cached[0]?.body) return { ok: true as const, text: cached[0].body, cached: true };
+    }
 
     const apiKey = process.env.XAI_API_KEY;
     if (!apiKey) {
@@ -60,10 +62,13 @@ Rules: no em dashes. No slogans. Label that the figures are a demo composite. Ma
     const text = body.choices[0]?.message.content?.trim() ?? "";
     if (!text) return { ok: false as const, error: "Empty explainer." };
 
-    await sql`
-      insert into gl_ai_cache (project_slug, lang, kind, body)
-      values (${data.slug}, ${data.lang}, 'explain', ${text})
-      on conflict (project_slug, lang, kind) do nothing
-    `;
+    if (!embeddedDbOff) {
+      const sql = await getSql();
+      await sql`
+        insert into gl_ai_cache (project_slug, lang, kind, body)
+        values (${data.slug}, ${data.lang}, 'explain', ${text})
+        on conflict (project_slug, lang, kind) do nothing
+      `;
+    }
     return { ok: true as const, text, cached: false };
   });

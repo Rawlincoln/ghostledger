@@ -1,10 +1,60 @@
 import { createServerFn } from "@tanstack/react-start";
-import { getSql } from "@/lib/db";
+import { embeddedDbOff, getSql } from "@/lib/db";
 import { allProjects } from "./catalog";
 import { asCountry, emptyClockMap, type CountryId } from "./country";
 import type { Observation, Project, ReportRow } from "./types";
 
 let seeded = false;
+
+type MemReport = ReportRow;
+
+const memReports: MemReport[] = [];
+let memReportId = 1;
+
+export function memoryReportHits(): Array<{
+  responsible_name: string;
+  responsible_role: string | null;
+  project_slug: string;
+  created_at: string;
+  disbursed_kes: number;
+  name: string;
+  name_sw: string;
+  county: string;
+  country: string;
+}> {
+  return memReports.flatMap((r) => {
+    if (!r.responsible_name?.trim()) return [];
+    const project = allProjects().find((p) => p.slug === r.project_slug);
+    if (!project) return [];
+    return [{
+      responsible_name: r.responsible_name,
+      responsible_role: r.responsible_role,
+      project_slug: r.project_slug,
+      created_at: r.created_at,
+      disbursed_kes: project.disbursedKes,
+      name: project.name,
+      name_sw: project.nameSw,
+      county: project.county,
+      country: project.country ?? "ke",
+    }];
+  });
+}
+
+function rankStatus(status: string): number {
+  if (status === "ghost") return 0;
+  if (status === "incomplete") return 1;
+  if (status === "delayed") return 2;
+  return 3;
+}
+
+function catalogProjects(): Project[] {
+  return [...allProjects()]
+    .sort((a, b) => rankStatus(a.status) - rankStatus(b.status) || b.allocatedKes - a.allocatedKes)
+    .map((p) => ({
+      ...p,
+      seedReports: p.seedReports + memReports.filter((r) => r.project_slug === p.slug).length,
+    }));
+}
 
 async function ensureSeed() {
   if (seeded) return;
@@ -112,6 +162,7 @@ function asProject(row: ProjectRow): Project {
 }
 
 export const listProjects = createServerFn({ method: "GET" }).handler(async () => {
+  if (embeddedDbOff) return catalogProjects();
   await ensureSeed();
   const sql = await getSql();
   const rows = await sql<ProjectRow>`
@@ -128,6 +179,11 @@ export const listProjects = createServerFn({ method: "GET" }).handler(async () =
 export const getProject = createServerFn({ method: "GET" })
   .validator((input: { slug: string }) => input)
   .handler(async ({ data }) => {
+    if (embeddedDbOff) {
+      const project = catalogProjects().find((p) => p.slug === data.slug) ?? null;
+      const reports = memReports.filter((r) => r.project_slug === data.slug);
+      return { project, reports };
+    }
     await ensureSeed();
     const sql = await getSql();
     const rows = await sql<ProjectRow>`
@@ -176,13 +232,34 @@ export const submitReport = createServerFn({ method: "POST" })
     responsible_role?: string;
   }) => input)
   .handler(async ({ data }) => {
-    await ensureSeed();
     const note = data.note.trim().slice(0, 280);
     const responsibleName = (data.responsible_name ?? "").trim().slice(0, 80);
     const responsibleRole = (data.responsible_role ?? "").trim().slice(0, 80);
     if (!data.slug || !data.observation || !data.evidence_hash) {
       return { ok: false as const, error: "Incomplete observation." };
     }
+    if (embeddedDbOff) {
+      if (!allProjects().some((p) => p.slug === data.slug)) {
+        return { ok: false as const, error: "Unknown project." };
+      }
+      const created_at = new Date().toISOString();
+      const id = memReportId++;
+      memReports.unshift({
+        id,
+        project_slug: data.slug,
+        observation: data.observation,
+        lat: data.lat,
+        lng: data.lng,
+        distance_m: data.distance_m,
+        note: note || null,
+        evidence_hash: data.evidence_hash,
+        responsible_name: responsibleName || null,
+        responsible_role: responsibleRole || null,
+        created_at,
+      });
+      return { ok: true as const, id, created_at };
+    }
+    await ensureSeed();
     const sql = await getSql();
     const exists = await sql<{ slug: string }>`select slug from gl_projects where slug = ${data.slug} limit 1`;
     if (!exists[0]) return { ok: false as const, error: "Unknown project." };
@@ -214,6 +291,19 @@ const emptyExtras = (): ClockExtras => ({
 });
 
 export const getClockExtras = createServerFn({ method: "GET" }).handler(async () => {
+  if (embeddedDbOff) {
+    const byCountry: Record<CountryId, ClockExtras> = emptyClockMap(emptyExtras);
+    for (const report of memReports) {
+      const project = allProjects().find((p) => p.slug === report.project_slug);
+      const id = asCountry(project?.country);
+      byCountry[id].reportCount += 1;
+      if (report.observation === "not_found" && project) {
+        byCountry[id].citizenConfirmedKes += project.disbursedKes;
+        byCountry[id].confirmedProjects += 1;
+      }
+    }
+    return byCountry;
+  }
   await ensureSeed();
   const sql = await getSql();
   const confirmed = await sql<{ country: string; kes: number; n: number }>`

@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { getSql } from "@/lib/db";
+import { embeddedDbOff, getSql } from "@/lib/db";
 import { parseGuestId } from "./guest";
 import { SEED_BOUNTIES } from "./bounty-seed";
 import { asCountry } from "./country";
@@ -91,6 +91,31 @@ function daysFromNow(days: number): string {
   return new Date(Date.now() + days * 86_400_000).toISOString();
 }
 
+function memoryBounties(): BountyRow[] {
+  const createdAt = "2026-01-01T00:00:00.000Z";
+  return SEED_BOUNTIES.map((b, i) => ({
+    id: i + 1,
+    slug: b.slug,
+    posterUserId: SEED_POSTER,
+    posterName: b.posterName,
+    title: b.title,
+    titleSw: b.titleSw,
+    description: b.description,
+    deliverables: b.deliverables,
+    projectSlug: b.projectSlug,
+    county: b.county,
+    country: asCountry(b.country),
+    rewardKes: b.rewardKes,
+    escrowKes: b.status === "open" ? b.rewardKes : 0,
+    status: b.status,
+    deadline: daysFromNow(b.days),
+    winnerSubId: null,
+    isDemo: true,
+    createdAt,
+    subCount: b.subs.length,
+  }));
+}
+
 async function ensureBountySeed() {
   if (seeded) return;
   const sql = await getSql();
@@ -153,6 +178,17 @@ async function ensureWallet(userId: string): Promise<Wallet> {
 export const bountyStats = createServerFn({ method: "GET" })
   .validator((input: { country?: string } | undefined) => input ?? {})
   .handler(async ({ data }): Promise<BountyStats> => {
+    if (embeddedDbOff) {
+      const country = asCountry(data.country);
+      const rows = memoryBounties().filter((b) => b.country === country);
+      const seeds = SEED_BOUNTIES.filter((b) => asCountry(b.country) === country);
+      return {
+        live: rows.filter((b) => b.status === "open").length,
+        unclaimedKes: rows.filter((b) => b.status === "open").reduce((n, b) => n + b.escrowKes, 0),
+        submissions: seeds.reduce((n, b) => n + b.subs.length, 0),
+        paidOutKes: rows.filter((b) => b.status === "paid").reduce((n, b) => n + b.rewardKes, 0),
+      };
+    }
     await ensureBountySeed();
     const sql = await getSql();
     const country = asCountry(data.country);
@@ -180,6 +216,15 @@ export const bountyStats = createServerFn({ method: "GET" })
 export const listBounties = createServerFn({ method: "GET" })
   .validator((input: { tab: "open" | "paid"; sort: BountySort; county?: string | null; country?: string }) => input)
   .handler(async ({ data }): Promise<BountyRow[]> => {
+    if (embeddedDbOff) {
+      const country = asCountry(data.country);
+      let rows = memoryBounties().filter((b) => b.status === data.tab && b.country === country);
+      if (data.county?.trim()) rows = rows.filter((b) => b.county === data.county);
+      if (data.sort === "newest") rows.sort((a, b) => b.id - a.id);
+      else if (data.sort === "ending") rows.sort((a, b) => a.deadline.localeCompare(b.deadline));
+      else rows.sort((a, b) => b.rewardKes - a.rewardKes);
+      return rows;
+    }
     await ensureBountySeed();
     const sql = await getSql();
     const status = data.tab;
@@ -221,6 +266,7 @@ export const listBounties = createServerFn({ method: "GET" })
 export const listMyBounties = createServerFn({ method: "GET" })
   .validator((input: { sort: BountySort; guestId?: string }) => input)
   .handler(async ({ data }): Promise<BountyRow[]> => {
+    if (embeddedDbOff) return [];
     await ensureBountySeed();
     const sql = await getSql();
     const uid = parseGuestId(data.guestId);
@@ -242,6 +288,19 @@ export const listMyBounties = createServerFn({ method: "GET" })
 export const listPayouts = createServerFn({ method: "GET" })
   .validator((input: { country?: string } | undefined) => input ?? {})
   .handler(async ({ data }) => {
+    if (embeddedDbOff) {
+      const country = asCountry(data.country);
+      return SEED_BOUNTIES.filter((b) => asCountry(b.country) === country).flatMap((b) =>
+        b.subs
+          .filter((s) => s.status === "accepted")
+          .map((s) => ({
+            hunterName: s.name,
+            amountKes: b.rewardKes,
+            title: b.title,
+            at: "2026-01-01T00:00:00.000Z",
+          })),
+      );
+    }
     await ensureBountySeed();
     const sql = await getSql();
     const country = asCountry(data.country);
@@ -269,6 +328,25 @@ export const listPayouts = createServerFn({ method: "GET" })
 export const listLeaders = createServerFn({ method: "GET" })
   .validator((input: { country?: string } | undefined) => input ?? {})
   .handler(async ({ data }) => {
+    if (embeddedDbOff) {
+      const country = asCountry(data.country);
+      const seeds = SEED_BOUNTIES.filter((b) => asCountry(b.country) === country);
+      const earned = new Map<string, number>();
+      for (const b of seeds) {
+        for (const s of b.subs) {
+          if (s.status !== "accepted") continue;
+          earned.set(s.name, (earned.get(s.name) ?? 0) + b.rewardKes);
+        }
+      }
+      const spent = new Map<string, number>();
+      for (const b of seeds) spent.set(b.posterName, (spent.get(b.posterName) ?? 0) + b.rewardKes);
+      const rank = (map: Map<string, number>) =>
+        [...map.entries()]
+          .map(([name, amountKes]) => ({ name, amountKes }))
+          .sort((a, b) => b.amountKes - a.amountKes)
+          .slice(0, 5);
+      return { earners: rank(earned), spenders: rank(spent) };
+    }
     await ensureBountySeed();
     const sql = await getSql();
     const country = asCountry(data.country);
@@ -298,6 +376,21 @@ export const listLeaders = createServerFn({ method: "GET" })
 export const getBounty = createServerFn({ method: "GET" })
   .validator((input: { id: number }) => input)
   .handler(async ({ data }) => {
+    if (embeddedDbOff) {
+      const bounty = memoryBounties().find((b) => b.id === data.id) ?? null;
+      if (!bounty) return { bounty: null, submissions: [] as BountySub[] };
+      const seed = SEED_BOUNTIES[data.id - 1];
+      const submissions: BountySub[] = (seed?.subs ?? []).map((s, i) => ({
+        id: i + 1,
+        bountyId: bounty.id,
+        hunterUserId: s.hunter,
+        hunterName: s.name,
+        proof: s.proof,
+        status: s.status,
+        createdAt: "2026-01-01T00:00:00.000Z",
+      }));
+      return { bounty, submissions };
+    }
     await ensureBountySeed();
     const sql = await getSql();
     const rows = await sql<BountySql>`
@@ -321,6 +414,7 @@ export const getBounty = createServerFn({ method: "GET" })
 export const getWallet = createServerFn({ method: "GET" })
   .validator((input: { guestId?: string } | undefined) => input ?? {})
   .handler(async ({ data }): Promise<Wallet> => {
+    if (embeddedDbOff) return { balanceKes: DEMO_CREDIT_KES };
     await ensureBountySeed();
     return ensureWallet(parseGuestId(data.guestId));
   });

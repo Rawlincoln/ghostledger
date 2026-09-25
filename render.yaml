@@ -1,11 +1,11 @@
-# GhostLedger on Render.
-# Free (512MB) is killed on boot: the embedded database peaks near 760MB.
-# 1c-2g is the smallest plan that stays up. Dashboard shows the price before you confirm.
+# GhostLedger on Render's free instance (512MB).
+# PGLite needs ~490MB by itself, so this host serves the public record from memory.
+# Citizen reports last until the free instance sleeps.
 services:
   - type: web
     name: ghostledger
     runtime: node
-    plan: 1c-2g
+    plan: free
     region: frankfurt
     branch: main
     buildCommand: PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 NPM_CONFIG_PRODUCTION=false npm ci && npm run build
@@ -20,5 +20,7 @@ services:
         value: 0.0.0.0
       - key: VITE_AUTH_ENABLED
         value: "false"
+      - key: GHOST_EMBEDDED_DB
+        value: "off"
       - key: PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD
         value: "1"
